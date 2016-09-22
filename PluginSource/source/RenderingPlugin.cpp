@@ -1,4 +1,4 @@
-// Example low level rendering Unity plugin
+﻿// Example low level rendering Unity plugin
 
 #include "PlatformBase.h"
 #include "RenderAPI.h"

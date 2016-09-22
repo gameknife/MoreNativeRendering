@@ -6,6 +6,4 @@ LIBRARY
 EXPORTS
    UnityPluginLoad
    UnityPluginUnload
-   SetTimeFromUnity
-   SetTextureFromUnity
    GetRenderEventFunc

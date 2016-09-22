@@ -140,97 +140,27 @@ void RenderAPI_D3D11::CreateResources()
 	desc.ByteWidth = 1024;
 	desc.BindFlags = D3D11_BIND_VERTEX_BUFFER;
 	m_Device->CreateBuffer(&desc, NULL, &m_VB);
-
-	// constant buffer
-	desc.Usage = D3D11_USAGE_DEFAULT;
-	desc.ByteWidth = 64; // hold 1 matrix
-	desc.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
-	desc.CPUAccessFlags = 0;
-	m_Device->CreateBuffer(&desc, NULL, &m_CB);
-
-	// shaders
-	HRESULT hr;
-	hr = m_Device->CreateVertexShader(kVertexShaderCode, sizeof(kVertexShaderCode), nullptr, &m_VertexShader);
-	if (FAILED(hr))
-		OutputDebugStringA("Failed to create vertex shader.\n");
-	hr = m_Device->CreatePixelShader(kPixelShaderCode, sizeof(kPixelShaderCode), nullptr, &m_PixelShader);
-	if (FAILED(hr))
-		OutputDebugStringA("Failed to create pixel shader.\n");
-
-	// input layout
-	if (m_VertexShader)
-	{
-		D3D11_INPUT_ELEMENT_DESC s_DX11InputElementDesc[] =
-		{
-			{ "POSITION", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 0, D3D11_INPUT_PER_VERTEX_DATA, 0 },
-			{ "COLOR", 0, DXGI_FORMAT_R8G8B8A8_UNORM, 0, 12, D3D11_INPUT_PER_VERTEX_DATA, 0 },
-		};
-		m_Device->CreateInputLayout(s_DX11InputElementDesc, 2, kVertexShaderCode, sizeof(kVertexShaderCode), &m_InputLayout);
-	}
-
-	// render states
-	D3D11_RASTERIZER_DESC rsdesc;
-	memset(&rsdesc, 0, sizeof(rsdesc));
-	rsdesc.FillMode = D3D11_FILL_SOLID;
-	rsdesc.CullMode = D3D11_CULL_NONE;
-	rsdesc.DepthClipEnable = TRUE;
-	m_Device->CreateRasterizerState(&rsdesc, &m_RasterState);
-
-	D3D11_DEPTH_STENCIL_DESC dsdesc;
-	memset(&dsdesc, 0, sizeof(dsdesc));
-	dsdesc.DepthEnable = TRUE;
-	dsdesc.DepthWriteMask = D3D11_DEPTH_WRITE_MASK_ZERO;
-	dsdesc.DepthFunc = D3D11_COMPARISON_LESS_EQUAL;
-	m_Device->CreateDepthStencilState(&dsdesc, &m_DepthState);
-
-	D3D11_BLEND_DESC bdesc;
-	memset(&bdesc, 0, sizeof(bdesc));
-	bdesc.RenderTarget[0].BlendEnable = FALSE;
-	bdesc.RenderTarget[0].RenderTargetWriteMask = 0xF;
-	m_Device->CreateBlendState(&bdesc, &m_BlendState);
 }
 
 
 void RenderAPI_D3D11::ReleaseResources()
 {
 	SAFE_RELEASE(m_VB);
-	SAFE_RELEASE(m_CB);
-	SAFE_RELEASE(m_VertexShader);
-	SAFE_RELEASE(m_PixelShader);
-	SAFE_RELEASE(m_InputLayout);
-	SAFE_RELEASE(m_RasterState);
-	SAFE_RELEASE(m_BlendState);
-	SAFE_RELEASE(m_DepthState);
 }
 
 
 void RenderAPI_D3D11::DrawSimpleTriangles(int triangleCount, int vertexSize, const void* data)
-{
-    float worldMatrix[16];
-    
+{  
 	ID3D11DeviceContext* ctx = NULL;
 	m_Device->GetImmediateContext(&ctx);
-
-	// Set basic render state
-	ctx->OMSetDepthStencilState(m_DepthState, 0);
-	ctx->RSSetState(m_RasterState);
-	ctx->OMSetBlendState(m_BlendState, NULL, 0xFFFFFFFF);
-
-	// Update constant buffer - just the world matrix in our case
-	ctx->UpdateSubresource(m_CB, 0, NULL, worldMatrix, 64, 0);
-
-	// Set shaders
-	ctx->VSSetConstantBuffers(0, 1, &m_CB);
-	ctx->VSSetShader(m_VertexShader, NULL, 0);
-	ctx->PSSetShader(m_PixelShader, NULL, 0);
 
 	// Update vertex buffer
 	ctx->UpdateSubresource(m_VB, 0, NULL, data, triangleCount * 3 * vertexSize, 0);
 
 	// set input assembler data and draw
-	ctx->IASetInputLayout(m_InputLayout);
+	//ctx->IASetInputLayout(m_InputLayout);
 	ctx->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
-	UINT stride = kVertexSize;
+	UINT stride = vertexSize;
 	UINT offset = 0;
 	ctx->IASetVertexBuffers(0, 1, &m_VB, &stride, &offset);
 	ctx->Draw(triangleCount * 3, 0);
