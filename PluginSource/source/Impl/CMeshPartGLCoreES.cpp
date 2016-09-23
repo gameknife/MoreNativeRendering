@@ -1,13 +1,11 @@
-#include "GLdefine.h"
-#include "CMeshPart.h"
-//#include "AGOC/New/ObjectPool.h"
+#include "CMeshPartGLCoreES.h"
 
-CMeshPart::CMeshPart() :
-	_mesh(NULL), _meshIndex(0), _primitiveType(CMesh::TRIANGLES), _indexCount(0), _indexBuffer(0), _indexFormat(CMesh::INDEX16)
+CMeshPartGLCoreES::CMeshPartGLCoreES() :
+	_mesh(NULL), _meshIndex(0), _primitiveType(RenderAPI::TRIANGLES), _indexCount(0), _indexBuffer(0), _indexFormat(RenderAPI::INDEX16)
 {
 }
 
-CMeshPart::~CMeshPart()
+CMeshPartGLCoreES::~CMeshPartGLCoreES()
 {
     if (_indexBuffer)
     {
@@ -18,8 +16,8 @@ CMeshPart::~CMeshPart()
 
 }
 
-CMeshPart* CMeshPart::create(CMesh* mesh, unsigned int meshIndex, CMesh::PrimitiveType primitiveType,
-    CMesh::IndexFormat indexFormat, unsigned int indexCount)
+CMeshPartGLCoreES* CMeshPartGLCoreES::create(CMeshGLCoreES* mesh, unsigned int meshIndex, RenderAPI::PrimitiveType primitiveType,
+	RenderAPI::IndexFormat indexFormat, unsigned int indexCount)
 {
     // Create a VBO for our index buffer.
     GLuint vbo;
@@ -30,13 +28,13 @@ CMeshPart* CMeshPart::create(CMesh* mesh, unsigned int meshIndex, CMesh::Primiti
     unsigned int indexSize = 0;
     switch (indexFormat)
     {
-    case CMesh::INDEX8:
+    case RenderAPI::INDEX8:
         indexSize = 1;
         break;
-    case CMesh::INDEX16:
+    case RenderAPI::INDEX16:
         indexSize = 2;
         break;
-    case CMesh::INDEX32:
+    case RenderAPI::INDEX32:
         indexSize = 4;
         break;
     default:
@@ -48,7 +46,7 @@ CMeshPart* CMeshPart::create(CMesh* mesh, unsigned int meshIndex, CMesh::Primiti
 
     glBufferData(GL_ELEMENT_ARRAY_BUFFER, indexSize * indexCount, NULL, GL_STREAM_DRAW);
 #endif
-    CMeshPart* part = new CMeshPart();
+    CMeshPartGLCoreES* part = new CMeshPartGLCoreES();
     part->_mesh = mesh;
     part->_meshIndex = meshIndex;
     part->_primitiveType = primitiveType;
@@ -59,32 +57,32 @@ CMeshPart* CMeshPart::create(CMesh* mesh, unsigned int meshIndex, CMesh::Primiti
     return part;
 }
 
-unsigned int CMeshPart::getMeshIndex() const
+unsigned int CMeshPartGLCoreES::getMeshIndex() const
 {
     return _meshIndex;
 }
 
-CMesh::PrimitiveType CMeshPart::getPrimitiveType() const
+RenderAPI::PrimitiveType CMeshPartGLCoreES::getPrimitiveType() const
 {
     return _primitiveType;
 }
 
-unsigned int CMeshPart::getIndexCount() const
+unsigned int CMeshPartGLCoreES::getIndexCount() const
 {
     return _indexCount;
 }
 
-CMesh::IndexFormat CMeshPart::getIndexFormat() const
+RenderAPI::IndexFormat CMeshPartGLCoreES::getIndexFormat() const
 {
     return _indexFormat;
 }
 
-IndexBufferHandle CMeshPart::getIndexBuffer() const
+IndexBufferHandle CMeshPartGLCoreES::getIndexBuffer() const
 {
     return _indexBuffer;
 }
 
-void CMeshPart::setIndexData(const void* indexData, unsigned int indexStart, unsigned int indexCount)
+void CMeshPartGLCoreES::setIndexData(const void* indexData, unsigned int indexStart, unsigned int indexCount)
 {
 #ifndef MUTE_RENDER
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, _indexBuffer);
@@ -92,17 +90,16 @@ void CMeshPart::setIndexData(const void* indexData, unsigned int indexStart, uns
     unsigned int indexSize = 0;
     switch (_indexFormat)
     {
-    case CMesh::INDEX8:
+    case RenderAPI::INDEX8:
         indexSize = 1;
         break;
-    case CMesh::INDEX16:
+    case RenderAPI::INDEX16:
         indexSize = 2;
         break;
-    case CMesh::INDEX32:
+    case RenderAPI::INDEX32:
         indexSize = 4;
         break;
     default:
-        //GP_ERROR("Unsupported index format (%d).", _indexFormat);
         return;
     }
 
@@ -117,7 +114,6 @@ void CMeshPart::setIndexData(const void* indexData, unsigned int indexStart, uns
             indexCount = _indexCount - indexStart;
         }
 
-		// resize the buffer
 		if (indexCount > _indexCount)
 		{
 			_indexCount = indexCount;

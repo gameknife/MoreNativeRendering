@@ -30,10 +30,16 @@
     <ClInclude Include="..\..\source\Unity\IUnityInterface.h">
       <Filter>Unity</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\source\CMesh.h" />
-    <ClInclude Include="..\..\source\CMeshPart.h" />
     <ClInclude Include="..\..\source\gldefine.h" />
-    <ClInclude Include="..\..\source\CVertexAttributeBinding.h" />
+    <ClInclude Include="..\..\source\Impl\CMeshGLCoreES.h">
+      <Filter>Impl</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\source\Impl\CMeshPartGLCoreES.h">
+      <Filter>Impl</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\source\Impl\CVertexAttribBindingGLCoreES.h">
+      <Filter>Impl</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\source\RenderAPI.cpp" />
@@ -46,9 +52,15 @@
       <Filter>GLEW</Filter>
     </ClCompile>
     <ClCompile Include="..\..\source\RenderAPI_D3D12.cpp" />
-    <ClCompile Include="..\..\source\CMesh.cpp" />
-    <ClCompile Include="..\..\source\CMeshPart.cpp" />
-    <ClCompile Include="..\..\source\CVertexAttributeBinding.cpp" />
+    <ClCompile Include="..\..\source\Impl\CMeshGLCoreES.cpp">
+      <Filter>Impl</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\source\Impl\CMeshPartGLCoreES.cpp">
+      <Filter>Impl</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\source\Impl\CVertexAttribBindingGLCoreES.cpp">
+      <Filter>Impl</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="GLEW">
@@ -56,6 +68,9 @@
     </Filter>
     <Filter Include="Unity">
       <UniqueIdentifier>{c01468d4-90d4-4d19-9a9b-ee2f1b5e9083}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Impl">
+      <UniqueIdentifier>{4e949c39-2436-444e-91b9-5d5373db9a8b}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>

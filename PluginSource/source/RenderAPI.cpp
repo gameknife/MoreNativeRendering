@@ -1,10 +1,34 @@
 #include "RenderAPI.h"
 #include "PlatformBase.h"
 #include "Unity/IUnityGraphics.h"
+#include "Impl/CMeshGLCoreES.h"
 
+UnityGfxRenderer g_api = kUnityGfxRendererNull;
+
+UnityGfxRenderer GetRenderAPIType()
+{
+	return g_api;
+}
+
+IMesh* CreateMesh(unsigned int vertexCount, unsigned int vertexLayout)
+{
+	switch (g_api)
+	{
+		case kUnityGfxRendererOpenGLCore:
+		case kUnityGfxRendererOpenGLES20:
+		case kUnityGfxRendererOpenGLES30:
+			return CMeshGLCoreES::createMesh(vertexCount, vertexLayout);
+		break;
+		default:
+			return NULL;
+		break;
+	}	
+}
 
 RenderAPI* CreateRenderAPI(UnityGfxRenderer apiType)
 {
+	g_api = apiType;
+
 #	if SUPPORT_D3D11
 	if (apiType == kUnityGfxRendererD3D11)
 	{

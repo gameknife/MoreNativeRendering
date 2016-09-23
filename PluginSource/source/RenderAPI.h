@@ -13,6 +13,32 @@ struct IUnityInterfaces;
 class RenderAPI
 {
 public:
+	enum IndexFormat
+	{
+		INDEX8,
+		INDEX16,
+		INDEX32,
+	};
+
+	enum PrimitiveType
+	{
+		TRIANGLES,
+		TRIANGLE_STRIP,
+		LINES,
+		LINE_STRIP,
+		POINTS,
+	};
+	// IMPORTANT!!! THAT YOUR MESH SHOULD APPLY ELEMENT LIKE THE FOLLOWING ORDER!!! -kyleyi
+	enum VertecDeclElement
+	{
+		eVDE_Position = 1 << 0,			// float3
+		eVDE_Normal = 1 << 1,			// float3
+		eVDE_Texcoord = 1 << 2,			// floot2
+		eVDE_Color = 1 << 3,			// dword
+		eVDE_TexcoordFull = 1 << 4,			// floot4
+											// etc
+	};
+
 	virtual ~RenderAPI() { }
 
 
@@ -38,7 +64,29 @@ public:
 	virtual void EndModifyTexture(void* textureHandle, int textureWidth, int textureHeight, int rowPitch, void* dataPtr) = 0;
 };
 
+struct CullBox
+{
+	float min[3];
+	float max[3];
+};
+
+struct IMeshPart
+{
+	virtual void setIndexData(const void* indexData, unsigned int indexStart, unsigned int indexCount) = 0;
+};
+
+struct IMesh
+{
+	virtual void setVertexData(const void* vertexData, unsigned int vertexStart, unsigned int vertexBufferSize) = 0;
+	virtual IMeshPart* addPart(RenderAPI::PrimitiveType primitiveType, RenderAPI::IndexFormat indexFormat, unsigned int indexCount) = 0;
+	virtual unsigned int getPartCount() const = 0;
+	virtual IMeshPart* getPart(unsigned int index) = 0;
+	virtual const CullBox& getBoundingBox() const = 0;
+	virtual void setBoundingBox(const CullBox& box) = 0;
+	virtual void render(int& rendered_tri, int& rendered_vert) =0;
+};
 
 // Create a graphics API implementation instance for the given API type.
 RenderAPI* CreateRenderAPI(UnityGfxRenderer apiType);
-
+IMesh* CreateMesh(unsigned int vertexCount, unsigned int vertexLayout);
+UnityGfxRenderer GetRenderAPIType();

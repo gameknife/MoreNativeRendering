@@ -1,19 +1,19 @@
 #ifndef CVERTEXATTRIBUTEBINDING_H_
 #define CVERTEXATTRIBUTEBINDING_H_
 
-#include "gldefine.h"
+#include "../gldefine.h"
 
-class CMesh;
-class CVertexAttributeBinding
+class CMeshGLCoreES;
+class CVertexAttribBindingGLCoreES
 {
 public:
-    static CVertexAttributeBinding* create(CMesh* mesh);
+    static CVertexAttribBindingGLCoreES* create(CMeshGLCoreES* mesh);
 
     void bind();
     void unbind();
 
-	CVertexAttributeBinding();
-	~CVertexAttributeBinding();
+	CVertexAttribBindingGLCoreES();
+	~CVertexAttribBindingGLCoreES();
 
 private:
     class VertexAttribute
@@ -29,14 +29,14 @@ private:
 
 
 
-    CVertexAttributeBinding& operator=(const CVertexAttributeBinding&);
-    static CVertexAttributeBinding* create(CMesh* mesh, void* vertexPointer);
+    CVertexAttribBindingGLCoreES& operator=(const CVertexAttribBindingGLCoreES&);
+    static CVertexAttribBindingGLCoreES* create(CMeshGLCoreES* mesh, void* vertexPointer);
 
     void setVertexAttribPointer(GLuint indx, GLint size, GLenum type, GLboolean normalize, GLsizei stride, void* pointer);
 
     GLuint _handle;
     VertexAttribute* _attributes;
-    CMesh* _mesh;
+    CMeshGLCoreES* _mesh;
 };
 
 #endif

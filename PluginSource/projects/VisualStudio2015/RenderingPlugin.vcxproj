@@ -19,13 +19,13 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\..\source\CMesh.h" />
-    <ClInclude Include="..\..\source\CMeshPart.h" />
-    <ClInclude Include="..\..\source\CVertexAttributeBinding.h" />
     <ClInclude Include="..\..\source\gldefine.h" />
     <ClInclude Include="..\..\source\GLEW\glew.h" />
     <ClInclude Include="..\..\source\GLEW\glxew.h" />
     <ClInclude Include="..\..\source\GLEW\wglew.h" />
+    <ClInclude Include="..\..\source\Impl\CMeshGLCoreES.h" />
+    <ClInclude Include="..\..\source\Impl\CMeshPartGLCoreES.h" />
+    <ClInclude Include="..\..\source\Impl\CVertexAttribBindingGLCoreES.h" />
     <ClInclude Include="..\..\source\PlatformBase.h" />
     <ClInclude Include="..\..\source\RenderAPI.h" />
     <ClInclude Include="..\..\source\Unity\IUnityGraphics.h" />
@@ -36,10 +36,10 @@
     <ClInclude Include="..\..\source\Unity\IUnityInterface.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\..\source\CMesh.cpp" />
-    <ClCompile Include="..\..\source\CMeshPart.cpp" />
-    <ClCompile Include="..\..\source\CVertexAttributeBinding.cpp" />
     <ClCompile Include="..\..\source\GLEW\glew.c" />
+    <ClCompile Include="..\..\source\Impl\CMeshGLCoreES.cpp" />
+    <ClCompile Include="..\..\source\Impl\CMeshPartGLCoreES.cpp" />
+    <ClCompile Include="..\..\source\Impl\CVertexAttribBindingGLCoreES.cpp" />
     <ClCompile Include="..\..\source\RenderAPI.cpp" />
     <ClCompile Include="..\..\source\RenderAPI_D3D11.cpp" />
     <ClCompile Include="..\..\source\RenderAPI_D3D12.cpp" />
