@@ -9,13 +9,7 @@
 
 
 #include <assert.h>
-#if UNITY_IPHONE
-#	include <OpenGLES/ES2/gl.h>
-#elif UNITY_ANDROID
-#	include <GLES2/gl2.h>
-#else
-#	include "GLEW/glew.h"
-#endif
+#include "gldefine.h"
 
 
 class RenderAPI_OpenGLCoreES : public RenderAPI
@@ -26,7 +20,7 @@ public:
 
 	virtual void ProcessDeviceEvent(UnityGfxDeviceEventType type, IUnityInterfaces* interfaces);
 
-	virtual void DrawSimpleTriangles(int triangleCount, int vertexSize, const void* data);
+	virtual void DrawPrimitiveImmediate(int triangleCount, int vertexSize, const void* data);
 
 	virtual void* BeginModifyTexture(void* textureHandle, int textureWidth, int textureHeight, int* outRowPitch);
 	virtual void EndModifyTexture(void* textureHandle, int textureWidth, int textureHeight, int rowPitch, void* dataPtr);
@@ -99,7 +93,7 @@ void RenderAPI_OpenGLCoreES::ProcessDeviceEvent(UnityGfxDeviceEventType type, IU
 }
 
 
-void RenderAPI_OpenGLCoreES::DrawSimpleTriangles(int triangleCount, int vertexSize, const void* data)
+void RenderAPI_OpenGLCoreES::DrawPrimitiveImmediate(int triangleCount, int vertexSize, const void* data)
 {
 	// Core profile needs VAOs, setup one
 #	if SUPPORT_OPENGL_CORE

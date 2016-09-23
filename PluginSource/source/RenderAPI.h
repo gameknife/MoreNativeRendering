@@ -25,7 +25,7 @@ public:
 	// on what was rendered in Unity before. Here, we turn off culling, blending, depth writes etc.
 	// and draw the triangles with a given world matrix. The triangle data is
 	// float3 (position) and byte4 (color) per vertex.
-	virtual void DrawSimpleTriangles(int triangleCount, int vertexSize, const void* data) = 0;
+	virtual void DrawPrimitiveImmediate(int triangleCount, int vertexSize, const void* data) = 0;
 
 
 	// Begin modifying texture data. You need to pass texture width/height too, since some graphics APIs

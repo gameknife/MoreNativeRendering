@@ -19,6 +19,10 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\..\source\CMesh.h" />
+    <ClInclude Include="..\..\source\CMeshPart.h" />
+    <ClInclude Include="..\..\source\CVertexAttributeBinding.h" />
+    <ClInclude Include="..\..\source\gldefine.h" />
     <ClInclude Include="..\..\source\GLEW\glew.h" />
     <ClInclude Include="..\..\source\GLEW\glxew.h" />
     <ClInclude Include="..\..\source\GLEW\wglew.h" />
@@ -32,6 +36,9 @@
     <ClInclude Include="..\..\source\Unity\IUnityInterface.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="..\..\source\CMesh.cpp" />
+    <ClCompile Include="..\..\source\CMeshPart.cpp" />
+    <ClCompile Include="..\..\source\CVertexAttributeBinding.cpp" />
     <ClCompile Include="..\..\source\GLEW\glew.c" />
     <ClCompile Include="..\..\source\RenderAPI.cpp" />
     <ClCompile Include="..\..\source\RenderAPI_D3D11.cpp" />
@@ -42,6 +49,9 @@
     <ClCompile Include="..\..\source\RenderingPlugin.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="..\..\source\RenderAPI_Metal.mm">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+    </None>
     <None Include="..\..\source\RenderingPlugin.def" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
@@ -133,7 +143,7 @@
     </Link>
     <PostBuildEvent>
       <Command>
-</Command>
+      </Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">

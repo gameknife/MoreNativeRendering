@@ -17,7 +17,7 @@ public:
 
 	virtual void ProcessDeviceEvent(UnityGfxDeviceEventType type, IUnityInterfaces* interfaces);
 
-	virtual void DrawSimpleTriangles(int triangleCount, int vertexSize, const void* data);
+	virtual void DrawPrimitiveImmediate(int triangleCount, int vertexSize, const void* data);
 
 	virtual void* BeginModifyTexture(void* textureHandle, int textureWidth, int textureHeight, int* outRowPitch);
 	virtual void EndModifyTexture(void* textureHandle, int textureWidth, int textureHeight, int rowPitch, void* dataPtr);
@@ -41,7 +41,7 @@ void RenderAPI_OpenGL2::ProcessDeviceEvent(UnityGfxDeviceEventType type, IUnityI
 }
 
 
-void RenderAPI_OpenGL2::DrawSimpleTriangles(int triangleCount, int vertexSize, const void* data)
+void RenderAPI_OpenGL2::DrawPrimitiveImmediate(int triangleCount, int vertexSize, const void* data)
 {
 	glVertexPointer(3, GL_FLOAT, vertexSize, data);
 	glEnableClientState(GL_VERTEX_ARRAY);

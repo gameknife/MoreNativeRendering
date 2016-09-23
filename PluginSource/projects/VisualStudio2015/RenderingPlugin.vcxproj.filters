@@ -30,6 +30,10 @@
     <ClInclude Include="..\..\source\Unity\IUnityInterface.h">
       <Filter>Unity</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\source\CMesh.h" />
+    <ClInclude Include="..\..\source\CMeshPart.h" />
+    <ClInclude Include="..\..\source\gldefine.h" />
+    <ClInclude Include="..\..\source\CVertexAttributeBinding.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\source\RenderAPI.cpp" />
@@ -42,6 +46,9 @@
       <Filter>GLEW</Filter>
     </ClCompile>
     <ClCompile Include="..\..\source\RenderAPI_D3D12.cpp" />
+    <ClCompile Include="..\..\source\CMesh.cpp" />
+    <ClCompile Include="..\..\source\CMeshPart.cpp" />
+    <ClCompile Include="..\..\source\CVertexAttributeBinding.cpp" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="GLEW">
@@ -53,5 +60,6 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\source\RenderingPlugin.def" />
+    <None Include="..\..\source\RenderAPI_Metal.mm" />
   </ItemGroup>
 </Project>

@@ -27,7 +27,7 @@ public:
 
 	virtual void ProcessDeviceEvent(UnityGfxDeviceEventType type, IUnityInterfaces* interfaces);
 
-	virtual void DrawSimpleTriangles(int triangleCount, int vertexSize, const void* data);
+	virtual void DrawPrimitiveImmediate(int triangleCount, int vertexSize, const void* data);
 
 	virtual void* BeginModifyTexture(void* textureHandle, int textureWidth, int textureHeight, int* outRowPitch);
 	virtual void EndModifyTexture(void* textureHandle, int textureWidth, int textureHeight, int rowPitch, void* dataPtr);
@@ -86,7 +86,7 @@ void RenderAPI_D3D9::ProcessDeviceEvent(UnityGfxDeviceEventType type, IUnityInte
 }
 
 
-void RenderAPI_D3D9::DrawSimpleTriangles(int triangleCount, int vertexSize, const void* data)
+void RenderAPI_D3D9::DrawPrimitiveImmediate(int triangleCount, int vertexSize, const void* data)
 {
 
 	// Vertex layout

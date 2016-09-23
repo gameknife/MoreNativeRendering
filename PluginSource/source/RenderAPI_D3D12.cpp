@@ -19,7 +19,7 @@ public:
 
 	virtual void ProcessDeviceEvent(UnityGfxDeviceEventType type, IUnityInterfaces* interfaces);
 
-	virtual void DrawSimpleTriangles(int triangleCount, int vertexSize, const void* data);
+	virtual void DrawPrimitiveImmediate(int triangleCount, int vertexSize, const void* data);
 
 	virtual void* BeginModifyTexture(void* textureHandle, int textureWidth, int textureHeight, int* outRowPitch);
 	virtual void EndModifyTexture(void* textureHandle, int textureWidth, int textureHeight, int rowPitch, void* dataPtr);
@@ -152,7 +152,7 @@ void RenderAPI_D3D12::ProcessDeviceEvent(UnityGfxDeviceEventType type, IUnityInt
 }
 
 
-void RenderAPI_D3D12::DrawSimpleTriangles(int triangleCount, int vertexSize, const void* data)
+void RenderAPI_D3D12::DrawPrimitiveImmediate(int triangleCount, int vertexSize, const void* data)
 {
 	//@TODO: example not implemented yet :)
 }
