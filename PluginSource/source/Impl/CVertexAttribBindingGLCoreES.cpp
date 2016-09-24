@@ -32,10 +32,10 @@ CVertexAttribBindingGLCoreES* CVertexAttribBindingGLCoreES::create(CMeshGLCoreES
 
 // what a magic hack... holy unity3d! fix to another hacking one  -kyleyi
 #define IDX_POS 0
+#define IDX_COL 1
 #define IDX_NOR 2
 #define IDX_TEC 3
-#define IDX_COL 1
-#define IDX_TEC1 4
+#define IDX_TAN 4
 
 CVertexAttribBindingGLCoreES* CVertexAttribBindingGLCoreES::create(CMeshGLCoreES* mesh, void* vertexPointer)
 {
@@ -98,6 +98,11 @@ CVertexAttribBindingGLCoreES* CVertexAttribBindingGLCoreES::create(CMeshGLCoreES
 			b->setVertexAttribPointer(IDX_POS, 3, GL_FLOAT, false, mesh->getVertexSize(), (void*)(offset));
 			offset += 12;
 		}
+        if (mesh->getVertexLayout() & RenderAPI::eVDE_Color)
+        {
+            b->setVertexAttribPointer(IDX_COL, 4, GL_UNSIGNED_BYTE, true, mesh->getVertexSize(), (void*)(offset));
+            offset += 4;
+        }
 		if (mesh->getVertexLayout() & RenderAPI::eVDE_Normal)
 		{
 			b->setVertexAttribPointer(IDX_NOR, 3, GL_FLOAT, false, mesh->getVertexSize(), (void*)(offset));
@@ -113,11 +118,7 @@ CVertexAttribBindingGLCoreES* CVertexAttribBindingGLCoreES::create(CMeshGLCoreES
 			b->setVertexAttribPointer(IDX_TEC, 4, GL_FLOAT, false, mesh->getVertexSize(), (void*)(offset));
 			offset += 16;
 		}
-		if (mesh->getVertexLayout() & RenderAPI::eVDE_Color)
-		{
-			b->setVertexAttribPointer(IDX_COL, 4, GL_UNSIGNED_BYTE, true, mesh->getVertexSize(), (void*)(offset));
-			offset += 4;
-		}
+
 	}
 
     if (b->_handle)

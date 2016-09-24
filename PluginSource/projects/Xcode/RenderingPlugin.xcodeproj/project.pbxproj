@@ -19,6 +19,8 @@
 		FF98B6B91D9620F600C10858 /* CMeshGLCoreES.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FF98B6B31D9620F600C10858 /* CMeshGLCoreES.cpp */; };
 		FF98B6BA1D9620F600C10858 /* CMeshPartGLCoreES.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FF98B6B51D9620F600C10858 /* CMeshPartGLCoreES.cpp */; };
 		FF98B6BB1D9620F600C10858 /* CVertexAttribBindingGLCoreES.cpp in Sources */ = {isa = PBXBuildFile; fileRef = FF98B6B71D9620F600C10858 /* CVertexAttribBindingGLCoreES.cpp */; };
+		FF98B6BE1D96255B00C10858 /* CMeshMetal.mm in Sources */ = {isa = PBXBuildFile; fileRef = FF98B6BC1D96255B00C10858 /* CMeshMetal.mm */; };
+		FF98B6C11D9628BC00C10858 /* CMeshPartMetal.mm in Sources */ = {isa = PBXBuildFile; fileRef = FF98B6C01D9628BC00C10858 /* CMeshPartMetal.mm */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -66,6 +68,10 @@
 		FF98B6B61D9620F600C10858 /* CMeshPartGLCoreES.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CMeshPartGLCoreES.h; path = ../../source/Impl/CMeshPartGLCoreES.h; sourceTree = "<group>"; };
 		FF98B6B71D9620F600C10858 /* CVertexAttribBindingGLCoreES.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = CVertexAttribBindingGLCoreES.cpp; path = ../../source/Impl/CVertexAttribBindingGLCoreES.cpp; sourceTree = "<group>"; };
 		FF98B6B81D9620F600C10858 /* CVertexAttribBindingGLCoreES.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CVertexAttribBindingGLCoreES.h; path = ../../source/Impl/CVertexAttribBindingGLCoreES.h; sourceTree = "<group>"; };
+		FF98B6BC1D96255B00C10858 /* CMeshMetal.mm */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.objcpp; fileEncoding = 4; name = CMeshMetal.mm; path = ../../source/Impl/CMeshMetal.mm; sourceTree = "<group>"; };
+		FF98B6BD1D96255B00C10858 /* CMeshMetal.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CMeshMetal.h; path = ../../source/Impl/CMeshMetal.h; sourceTree = "<group>"; };
+		FF98B6BF1D9628BC00C10858 /* CMeshPartMetal.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CMeshPartMetal.h; path = ../../source/Impl/CMeshPartMetal.h; sourceTree = "<group>"; };
+		FF98B6C01D9628BC00C10858 /* CMeshPartMetal.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = CMeshPartMetal.mm; path = ../../source/Impl/CMeshPartMetal.mm; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -164,6 +170,10 @@
 		FF98B6B21D9620DE00C10858 /* Impl */ = {
 			isa = PBXGroup;
 			children = (
+				FF98B6BF1D9628BC00C10858 /* CMeshPartMetal.h */,
+				FF98B6C01D9628BC00C10858 /* CMeshPartMetal.mm */,
+				FF98B6BC1D96255B00C10858 /* CMeshMetal.mm */,
+				FF98B6BD1D96255B00C10858 /* CMeshMetal.h */,
 				FF98B6B31D9620F600C10858 /* CMeshGLCoreES.cpp */,
 				FF98B6B41D9620F600C10858 /* CMeshGLCoreES.h */,
 				FF98B6B51D9620F600C10858 /* CMeshPartGLCoreES.cpp */,
@@ -244,8 +254,10 @@
 				2B6899B91CF8396700C4BA4F /* RenderAPI.cpp in Sources */,
 				FF98B6BB1D9620F600C10858 /* CVertexAttribBindingGLCoreES.cpp in Sources */,
 				FF98B6B91D9620F600C10858 /* CMeshGLCoreES.cpp in Sources */,
+				FF98B6C11D9628BC00C10858 /* CMeshPartMetal.mm in Sources */,
 				2B6899B71CF8396700C4BA4F /* RenderAPI_OpenGL2.cpp in Sources */,
 				2B6899CB1CF8409A00C4BA4F /* RenderAPI_Metal.mm in Sources */,
+				FF98B6BE1D96255B00C10858 /* CMeshMetal.mm in Sources */,
 				2B6899C11CF8399700C4BA4F /* glew.c in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

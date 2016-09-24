@@ -45,6 +45,11 @@ public class MyBuildPostprocessor
 			"Impl/CMeshPartGLCoreES.h",
 			"Impl/CVertexAttribBindingGLCoreES.cpp",
 			"Impl/CVertexAttribBindingGLCoreES.h",
+
+			"Impl/CMeshMetal.h",
+			"Impl/CMeshMetal.mm",
+			"Impl/CMeshPartMetal.h",
+			"Impl/CMeshPartMetal.mm",
 		};
 
 		for(int i = 0 ; i < filesToCopy.Length ; ++i)

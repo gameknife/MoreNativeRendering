@@ -32,11 +32,12 @@ public:
 	enum VertecDeclElement
 	{
 		eVDE_Position = 1 << 0,			// float3
-		eVDE_Normal = 1 << 1,			// float3
-		eVDE_Texcoord = 1 << 2,			// floot2
-		eVDE_Color = 1 << 3,			// dword
-		eVDE_TexcoordFull = 1 << 4,			// floot4
-											// etc
+        eVDE_Color = 1 << 1,			// dword
+		eVDE_Normal = 1 << 2,			// float3
+        eVDE_Tangent = 1 << 3,			// float3
+		eVDE_Texcoord = 1 << 4,			// floot2
+		eVDE_TexcoordFull = 1 << 5,		// floot4
+										// etc
 	};
 
 	virtual ~RenderAPI() { }

@@ -19,6 +19,11 @@ IMesh* CreateMesh(unsigned int vertexCount, unsigned int vertexLayout)
 		case kUnityGfxRendererOpenGLES30:
 			return CMeshGLCoreES::createMesh(vertexCount, vertexLayout);
 		break;
+#if SUPPORT_METAL
+        case kUnityGfxRendererMetal:
+            extern IMesh* CreateMetalMesh(unsigned int vertexBufferSize, unsigned int vertexLayout);
+            return CreateMetalMesh(vertexCount, vertexLayout);
+#endif
 		default:
 			return NULL;
 		break;

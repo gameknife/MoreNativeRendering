@@ -66,6 +66,7 @@ public class RenderingPlugin : MonoBehaviour
         }
 
         CommandBuffer cb = new CommandBuffer();
+        cb.name = "CustomNativeRenderCmd";
         cb.DrawMesh(simpleMeshes[252], Matrix4x4.identity, testMat, 0, 0);
         cb.IssuePluginEvent(GetRenderEventFunc(), 1);
 

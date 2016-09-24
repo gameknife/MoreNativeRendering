@@ -46,10 +46,26 @@ RenderAPI* CreateRenderAPI_Metal()
 
 static id<MTLDevice> metalDevice;
 
+id<MTLDevice> GloablGetMTLDevice()
+{
+    return metalDevice;
+}
+
+static id<MTLRenderCommandEncoder> metalCmdEncoder;
+
+id<MTLRenderCommandEncoder> GloablGetMTLCmdEncoder()
+{
+#if UNITY_OSX
+    return metalCmdEncoder;
+#else
+    return UnityCurrentMTLCommandEncoder();
+#endif
+}
+
+
 
 void RenderAPI_Metal::CreateResources()
 {
-    //id<MTLDevice> metalDevice = device;
     NSError* error = nil;
     
     // Vertex / Constant buffers
@@ -75,6 +91,7 @@ void RenderAPI_Metal::ProcessDeviceEvent(UnityGfxDeviceEventType type, IUnityInt
 #if UNITY_OSX
         m_MetalGraphics = interfaces->Get<IUnityGraphicsMetal>();
         NSBundle* metalBundle = m_MetalGraphics->MetalBundle();
+        metalCmdEncoder = m_MetalGraphics->CurrentCommandEncoder();
 #else
         NSBundle* metalBundle = UnityGetMetalBundle();
 #endif
