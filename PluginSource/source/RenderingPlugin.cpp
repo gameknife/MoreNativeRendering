@@ -100,7 +100,7 @@ extern "C" void UNITY_INTERFACE_API OnRenderEvent(int eventID)
 		IMeshPart* meshpart = mesh->addPart(RenderAPI::TRIANGLES, RenderAPI::INDEX16, 6);
 
 		mesh->setVertexData(verts2, 0, sizeof(MyVertex2) * 4);
-		meshpart->setIndexData(indice2, 0, sizeof(short) * 6);
+		meshpart->setIndexData(indice2, 0, 6);
 	}
 
 	
