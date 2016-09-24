@@ -29,6 +29,7 @@ public class MyBuildPostprocessor
 
 		string[] filesToCopy = new string[]
 		{
+			"gldefine.h",
 			"PlatformBase.h",
 			"RenderAPI_Metal.mm",
 			"RenderAPI_OpenGLCoreES.cpp",
@@ -38,6 +39,12 @@ public class MyBuildPostprocessor
 			"Unity/IUnityInterface.h",
 			"Unity/IUnityGraphics.h",
 			"Unity/IUnityGraphicsMetal.h",
+			"Impl/CMeshGLCoreES.cpp",
+			"Impl/CMeshGLCoreES.h",
+			"Impl/CMeshPartGLCoreES.cpp",
+			"Impl/CMeshPartGLCoreES.h",
+			"Impl/CVertexAttribBindingGLCoreES.cpp",
+			"Impl/CVertexAttribBindingGLCoreES.h",
 		};
 
 		for(int i = 0 ; i < filesToCopy.Length ; ++i)
@@ -47,6 +54,7 @@ public class MyBuildPostprocessor
 			var dstPath = Path.Combine(pathToBuiltProject, dstLocalPath);
 			Directory.CreateDirectory(Path.Combine(pathToBuiltProject, "Libraries/NativeRendering/"));
 			Directory.CreateDirectory(Path.Combine(pathToBuiltProject, "Libraries/NativeRendering/Unity/"));
+			Directory.CreateDirectory(Path.Combine(pathToBuiltProject, "Libraries/NativeRendering/Impl/"));
 			File.Copy(srcPath, dstPath, true);
 			proj.AddFileToBuild(target, proj.AddFile(dstLocalPath, dstLocalPath));
 		}
