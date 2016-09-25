@@ -4,7 +4,7 @@
 
 CMeshGLCoreES::CMeshGLCoreES() 
 : _vertexAttributeBinding(NULL), _vertexCount(0), _vertexBuffer(0), _primitiveType(RenderAPI::TRIANGLES),
-  _partCount(0), _parts(NULL), _vertexLayout((RenderAPI::VertecDeclElement)0)
+  _partCount(0), _parts(NULL), _vertexLayout((RenderAPI::VertecDeclElement)0), vertexDataWaitForFlush(NULL)
 {
 
 }
@@ -28,7 +28,7 @@ CMeshGLCoreES::~CMeshGLCoreES()
     if (_vertexBuffer)
     {
 #ifndef MUTE_RENDER
-        glDeleteBuffers(1, &_vertexBuffer);
+		glDeleteBuffers(1, &_vertexBuffer);
 		_vertexBuffer = 0;
 #endif
     }
@@ -36,14 +36,8 @@ CMeshGLCoreES::~CMeshGLCoreES()
 
 CMeshGLCoreES* CMeshGLCoreES::createMesh(unsigned int vertexBufferSize, unsigned int vertexLayout)
 {
-    GLuint vbo;
-#ifndef MUTE_RENDER
-    glGenBuffers(1, &vbo);
-	glBindBuffer(GL_ARRAY_BUFFER, vbo);
-	glBufferData(GL_ARRAY_BUFFER, vertexBufferSize, NULL, GL_STREAM_DRAW);
-#endif
     CMeshGLCoreES* mesh = new CMeshGLCoreES();
-    mesh->_vertexBuffer = vbo;
+    //mesh->_vertexBuffer = vbo;
 	mesh->_vertexLayout = (RenderAPI::VertecDeclElement)vertexLayout;
 	mesh->_vertexCount = vertexBufferSize / mesh->getVertexSize();
     return mesh;
@@ -97,11 +91,14 @@ int CMeshGLCoreES::getVertexSize() const
 
 void CMeshGLCoreES::setVertexData(const void* vertexData, unsigned int vertexStart, unsigned int vertexBufferSize)
 {
-#ifndef MUTE_RENDER
-	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
-	glBindBuffer(GL_ARRAY_BUFFER, _vertexBuffer);
-	glBufferSubData(GL_ARRAY_BUFFER, 0, vertexBufferSize, vertexData);
-#endif
+	if (vertexDataWaitForFlush != NULL)
+	{
+		SAFE_DELETE(vertexDataWaitForFlush);
+	}
+
+	vertexDataWaitForFlush = malloc(vertexBufferSize);
+
+	::memcpy(vertexDataWaitForFlush, vertexData, vertexBufferSize);
 }
 
 IMeshPart* CMeshGLCoreES::addPart(RenderAPI::PrimitiveType primitiveType, RenderAPI::IndexFormat indexFormat, unsigned int indexCount)
@@ -134,12 +131,12 @@ IMeshPart* CMeshGLCoreES::getPart(unsigned int index)
     return _parts[index];
 }
  
-const CullBox& CMeshGLCoreES::getBoundingBox() const
+const CullBoxBase& CMeshGLCoreES::getBoundingBox() const
 {
     return _boundingBox;
 }
 
-void CMeshGLCoreES::setBoundingBox(const CullBox& box)
+void CMeshGLCoreES::setBoundingBox(const CullBoxBase& box)
 {
     _boundingBox = box;
 }
@@ -178,6 +175,27 @@ GLenum GetGLIndexType(RenderAPI::IndexFormat type)
 
 void CMeshGLCoreES::render( int& rendered_tri, int& rendered_vert )
 {
+	// check vbo
+	if (_vertexBuffer == NULL)
+	{
+#ifndef MUTE_RENDER
+		glGenBuffers(1, &_vertexBuffer);
+		glBindBuffer(GL_ARRAY_BUFFER, _vertexBuffer);
+		glBufferData(GL_ARRAY_BUFFER, _vertexCount * getVertexSize(), NULL, GL_STREAM_DRAW);
+#endif
+	}
+
+	// check flush data
+	if (vertexDataWaitForFlush != NULL)
+	{
+#ifndef MUTE_RENDER
+		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
+		glBindBuffer(GL_ARRAY_BUFFER, _vertexBuffer);
+		glBufferSubData(GL_ARRAY_BUFFER, 0, _vertexCount * getVertexSize(), vertexDataWaitForFlush);
+#endif
+		SAFE_DELETE(vertexDataWaitForFlush);
+	}
+
 #ifndef MUTE_RENDER
 	if (_vertexAttributeBinding == NULL)
 		_vertexAttributeBinding = CVertexAttribBindingGLCoreES::create(this);
@@ -192,7 +210,7 @@ void CMeshGLCoreES::render( int& rendered_tri, int& rendered_vert )
 		rendered_tri = part->getIndexCount() / 3;
 		rendered_vert = getVertexCount();
 
-		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, part->_indexBuffer);
+		part->render();
 		glDrawElements(GetGLPrimitiveType(part->getPrimitiveType()), part->getIndexCount(), GetGLIndexType(part->getIndexFormat()), 0);
 	}
 	_vertexAttributeBinding->unbind();

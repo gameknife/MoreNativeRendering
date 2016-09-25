@@ -35,7 +35,14 @@ CVertexAttribBindingGLCoreES* CVertexAttribBindingGLCoreES::create(CMeshGLCoreES
 #define IDX_COL 1
 #define IDX_NOR 2
 #define IDX_TEC 3
-#define IDX_TAN 4
+#define IDX_TECF 3
+#define IDX_TAN 5
+
+// if (getVertexLayout() & RenderAPI::eVDE_Position)
+// if (getVertexLayout() & RenderAPI::eVDE_Normal)
+// if (getVertexLayout() & RenderAPI::eVDE_Texcoord)
+// if (getVertexLayout() & RenderAPI::eVDE_TexcoordFull)
+// if (getVertexLayout() & RenderAPI::eVDE_Color)
 
 CVertexAttribBindingGLCoreES* CVertexAttribBindingGLCoreES::create(CMeshGLCoreES* mesh, void* vertexPointer)
 {
@@ -98,11 +105,6 @@ CVertexAttribBindingGLCoreES* CVertexAttribBindingGLCoreES::create(CMeshGLCoreES
 			b->setVertexAttribPointer(IDX_POS, 3, GL_FLOAT, false, mesh->getVertexSize(), (void*)(offset));
 			offset += 12;
 		}
-        if (mesh->getVertexLayout() & RenderAPI::eVDE_Color)
-        {
-            b->setVertexAttribPointer(IDX_COL, 4, GL_UNSIGNED_BYTE, true, mesh->getVertexSize(), (void*)(offset));
-            offset += 4;
-        }
 		if (mesh->getVertexLayout() & RenderAPI::eVDE_Normal)
 		{
 			b->setVertexAttribPointer(IDX_NOR, 3, GL_FLOAT, false, mesh->getVertexSize(), (void*)(offset));
@@ -115,10 +117,14 @@ CVertexAttribBindingGLCoreES* CVertexAttribBindingGLCoreES::create(CMeshGLCoreES
 		}
 		if (mesh->getVertexLayout() & RenderAPI::eVDE_TexcoordFull)
 		{
-			b->setVertexAttribPointer(IDX_TEC, 4, GL_FLOAT, false, mesh->getVertexSize(), (void*)(offset));
+			b->setVertexAttribPointer(IDX_TECF, 4, GL_FLOAT, false, mesh->getVertexSize(), (void*)(offset));
 			offset += 16;
 		}
-
+		if (mesh->getVertexLayout() & RenderAPI::eVDE_Color)
+		{
+			b->setVertexAttribPointer(IDX_COL, 4, GL_UNSIGNED_BYTE, true, mesh->getVertexSize(), (void*)(offset));
+			offset += 4;
+		}
 	}
 
     if (b->_handle)

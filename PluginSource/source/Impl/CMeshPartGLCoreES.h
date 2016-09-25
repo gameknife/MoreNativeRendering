@@ -1,5 +1,5 @@
-#ifndef CMESHPART_H_
-#define CMESHPART_H_
+#ifndef CMESHPARTGLESCORE_H_
+#define CMESHPARTGLESCORE_H_
 
 #include "CMeshGLCoreES.h"
 
@@ -18,6 +18,10 @@ public:
 
     void setIndexData(const void* indexData, unsigned int indexStart, unsigned int indexCount);
 
+	unsigned int getIndexSize();
+
+	void render();
+
 private:
     CMeshPartGLCoreES();
     CMeshPartGLCoreES(const CMeshPartGLCoreES& copy);
@@ -30,6 +34,10 @@ private:
 	RenderAPI::IndexFormat _indexFormat;
     unsigned int _indexCount;
     IndexBufferHandle _indexBuffer;
+
+	void* indexDataWaitForFlush;
+	unsigned int indexDataOffset;
+	unsigned int indexDataCount;
 };
 
 #endif

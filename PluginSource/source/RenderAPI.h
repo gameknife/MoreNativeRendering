@@ -1,9 +1,10 @@
 #pragma once
 
 #include "Unity/IUnityGraphics.h"
-
+#include <memory.h>
+#include <stdlib.h>
 struct IUnityInterfaces;
-
+struct IMesh;
 
 // Super-simple "graphics abstraction". This is nothing like how a proper platform abstraction layer would look like;
 // all this does is a base interface for whatever our plugin sample needs. Which is only "draw some triangles"
@@ -63,9 +64,17 @@ public:
 
 	// End modifying texture data.
 	virtual void EndModifyTexture(void* textureHandle, int textureWidth, int textureHeight, int rowPitch, void* dataPtr) = 0;
+
+	virtual void GarbageBufferRequest(void* name) {}
 };
 
-struct CullBox
+// Create a graphics API implementation instance for the given API type.
+RenderAPI* CreateRenderAPI(UnityGfxRenderer apiType);
+IMesh* CreateMesh(unsigned int vertexCount, unsigned int vertexLayout);
+UnityGfxRenderer GetRenderAPIType();
+extern void GarbageBufferRequest(IMesh* name);
+
+struct CullBoxBase
 {
 	float min[3];
 	float max[3];
@@ -82,12 +91,13 @@ struct IMesh
 	virtual IMeshPart* addPart(RenderAPI::PrimitiveType primitiveType, RenderAPI::IndexFormat indexFormat, unsigned int indexCount) = 0;
 	virtual unsigned int getPartCount() const = 0;
 	virtual IMeshPart* getPart(unsigned int index) = 0;
-	virtual const CullBox& getBoundingBox() const = 0;
-	virtual void setBoundingBox(const CullBox& box) = 0;
+	virtual const CullBoxBase& getBoundingBox() const = 0;
+	virtual void setBoundingBox(const CullBoxBase& box) = 0;
 	virtual void render(int& rendered_tri, int& rendered_vert) =0;
+
+	void markGarbage()
+	{
+		GarbageBufferRequest(this);
+	}
 };
 
-// Create a graphics API implementation instance for the given API type.
-RenderAPI* CreateRenderAPI(UnityGfxRenderer apiType);
-IMesh* CreateMesh(unsigned int vertexCount, unsigned int vertexLayout);
-UnityGfxRenderer GetRenderAPIType();

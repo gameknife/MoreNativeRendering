@@ -1,7 +1,7 @@
 #include "CMeshPartGLCoreES.h"
 
 CMeshPartGLCoreES::CMeshPartGLCoreES() :
-	_mesh(NULL), _meshIndex(0), _primitiveType(RenderAPI::TRIANGLES), _indexCount(0), _indexBuffer(0), _indexFormat(RenderAPI::INDEX16)
+	_mesh(NULL), _meshIndex(0), _primitiveType(RenderAPI::TRIANGLES), _indexCount(0), _indexBuffer(0), _indexFormat(RenderAPI::INDEX16), indexDataWaitForFlush(NULL)
 {
 }
 
@@ -10,7 +10,7 @@ CMeshPartGLCoreES::~CMeshPartGLCoreES()
     if (_indexBuffer)
     {
 #ifndef MUTE_RENDER
-        glDeleteBuffers(1, &_indexBuffer);
+		glDeleteBuffers(1, &_indexBuffer);
 #endif
     }
 
@@ -20,11 +20,7 @@ CMeshPartGLCoreES* CMeshPartGLCoreES::create(CMeshGLCoreES* mesh, unsigned int m
 	RenderAPI::IndexFormat indexFormat, unsigned int indexCount)
 {
     // Create a VBO for our index buffer.
-    GLuint vbo;
-#ifndef MUTE_RENDER
-    glGenBuffers(1, &vbo);
-    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, vbo);
-	
+
     unsigned int indexSize = 0;
     switch (indexFormat)
     {
@@ -38,21 +34,14 @@ CMeshPartGLCoreES* CMeshPartGLCoreES::create(CMeshGLCoreES* mesh, unsigned int m
         indexSize = 4;
         break;
     default:
-        //GP_ERROR("Unsupported index format (%d).", indexFormat);
-        glDeleteBuffers(1, &vbo);
         return NULL;
     }
-
-
-    glBufferData(GL_ELEMENT_ARRAY_BUFFER, indexSize * indexCount, NULL, GL_STREAM_DRAW);
-#endif
     CMeshPartGLCoreES* part = new CMeshPartGLCoreES();
     part->_mesh = mesh;
     part->_meshIndex = meshIndex;
     part->_primitiveType = primitiveType;
     part->_indexFormat = indexFormat;
     part->_indexCount = indexCount;
-    part->_indexBuffer = vbo;
 
     return part;
 }
@@ -84,44 +73,58 @@ IndexBufferHandle CMeshPartGLCoreES::getIndexBuffer() const
 
 void CMeshPartGLCoreES::setIndexData(const void* indexData, unsigned int indexStart, unsigned int indexCount)
 {
+	if (indexDataWaitForFlush != NULL)
+	{
+		SAFE_DELETE(indexDataWaitForFlush);
+	}
+
+	indexDataWaitForFlush = malloc(indexCount * getIndexSize());
+	indexDataOffset = indexStart;
+	indexDataCount = indexCount;
+	::memcpy(indexDataWaitForFlush, indexData, indexCount * getIndexSize());
+}
+
+unsigned int CMeshPartGLCoreES::getIndexSize()
+{
+	unsigned int indexSize = 0;
+	switch (_indexFormat)
+	{
+	case RenderAPI::INDEX8:
+		indexSize = 1;
+		break;
+	case RenderAPI::INDEX16:
+		indexSize = 2;
+		break;
+	case RenderAPI::INDEX32:
+		indexSize = 4;
+		break;
+	}
+	return indexSize;
+}
+
+void CMeshPartGLCoreES::render()
+{
+	if (_indexBuffer == NULL)
+	{
+		glGenBuffers(1, &_indexBuffer);
+		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, _indexBuffer);
+		glBufferData(GL_ELEMENT_ARRAY_BUFFER, getIndexSize() * _indexCount, NULL, GL_STREAM_DRAW);
+	}
+
 #ifndef MUTE_RENDER
-    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, _indexBuffer);
-
-    unsigned int indexSize = 0;
-    switch (_indexFormat)
-    {
-    case RenderAPI::INDEX8:
-        indexSize = 1;
-        break;
-    case RenderAPI::INDEX16:
-        indexSize = 2;
-        break;
-    case RenderAPI::INDEX32:
-        indexSize = 4;
-        break;
-    default:
-        return;
-    }
-
-    if (indexStart == 0 && indexCount == 0)
-    {
-        glBufferData(GL_ELEMENT_ARRAY_BUFFER, indexSize * _indexCount, indexData, GL_STREAM_DRAW);
-    }
-    else
-    {
-        if (indexCount == 0)
-        {
-            indexCount = _indexCount - indexStart;
-        }
-
-		if (indexCount > _indexCount)
+	if (indexDataWaitForFlush != NULL)
+	{
+		if (indexDataCount > _indexCount)
 		{
-			_indexCount = indexCount;
+			_indexCount = indexDataCount;
 			glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, _indexBuffer);
-			glBufferData(GL_ELEMENT_ARRAY_BUFFER, indexSize * indexCount, NULL, GL_STREAM_DRAW);
+			glBufferData(GL_ELEMENT_ARRAY_BUFFER, getIndexSize() * indexDataCount, NULL, GL_STREAM_DRAW);
 		}
 
-        glBufferSubData(GL_ELEMENT_ARRAY_BUFFER, indexStart * indexSize, indexCount * indexSize, indexData);
-    }
+		glBufferSubData(GL_ELEMENT_ARRAY_BUFFER, indexDataOffset * getIndexSize(), indexDataCount * getIndexSize(), indexDataWaitForFlush);
+		SAFE_DELETE(indexDataWaitForFlush);
+	}
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, _indexBuffer);
 #endif
+
 }

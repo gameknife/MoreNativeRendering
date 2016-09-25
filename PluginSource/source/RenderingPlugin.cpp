@@ -6,6 +6,7 @@
 #include <stdio.h>
 #include <assert.h>
 #include <math.h>
+#include <vector>
 
 // --------------------------------------------------------------------------
 // UnitySetInterfaces
@@ -86,31 +87,54 @@ unsigned short indice2[6] =
 	0,1,2,1,3,2,
 };
 
+std::vector<IMesh*> garbageReq;
+void GarbageBufferRequest(IMesh* name)
+{
+	garbageReq.push_back(name);
+}
+
 IMesh* mesh = NULL;
 extern "C" void UNITY_INTERFACE_API OnRenderEvent(int eventID)
 {
     // Unknown / unsupported graphics device type? Do nothing
     if (s_CurrentAPI == NULL)
         return;
-    
-    // Testing rendering a quad
-	if (mesh == NULL)
-	{
-		mesh = CreateMesh(4 * sizeof(MyVertex2), RenderAPI::eVDE_Position | RenderAPI::eVDE_Texcoord);
-		IMeshPart* meshpart = mesh->addPart(RenderAPI::TRIANGLES, RenderAPI::INDEX16, 6);
 
-		mesh->setVertexData(verts2, 0, sizeof(MyVertex2) * 4);
-		meshpart->setIndexData(indice2, 0, 6);
-	}
-
-	
-	if (mesh)
+	switch (eventID)
 	{
-		int tri_stats = 0;
-		int vert_stats = 0;
-		mesh->render(tri_stats, vert_stats);
+	case 0:
+	{
+		for (unsigned int i = 0; i < garbageReq.size(); ++i)
+		{
+			//s_CurrentAPI->GarbageBufferRequest(garbageReq[i]);
+			SAFE_DELETE(garbageReq[i]);
+		}
+		garbageReq.clear();
 	}
-	
+	case 999:
+	{
+		// Testing rendering a quad
+		if (mesh == NULL)
+		{
+			mesh = CreateMesh(4 * sizeof(MyVertex2), RenderAPI::eVDE_Position | RenderAPI::eVDE_Texcoord);
+			IMeshPart* meshpart = mesh->addPart(RenderAPI::TRIANGLES, RenderAPI::INDEX16, 6);
+
+			mesh->setVertexData(verts2, 0, sizeof(MyVertex2) * 4);
+			meshpart->setIndexData(indice2, 0, 6);
+		}
+
+		if (mesh)
+		{
+			int tri_stats = 0;
+			int vert_stats = 0;
+			mesh->render(tri_stats, vert_stats);
+		}
+	}
+		
+		break;
+	default:
+		break;
+	}
 }
 
 typedef	void	(*UnityPluginSetGraphicsDeviceFunc)(void* device, int deviceType, int eventType);
