@@ -267,12 +267,12 @@ IMeshPart* CMeshMetal::getPart(unsigned int index)
     return _parts[index];
 }
 
-const CullBox& CMeshMetal::getBoundingBox() const
+const CullBoxBase& CMeshMetal::getBoundingBox() const
 {
     return _boundingBox;
 }
 
-void CMeshMetal::setBoundingBox(const CullBox& box)
+void CMeshMetal::setBoundingBox(const CullBoxBase& box)
 {
     _boundingBox = box;
 }

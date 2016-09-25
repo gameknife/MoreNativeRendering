@@ -46,8 +46,8 @@ public:
     IMeshPart* addPart(RenderAPI::PrimitiveType primitiveType, RenderAPI::IndexFormat indexFormat, unsigned int indexCount);
     unsigned int getPartCount() const;
     IMeshPart* getPart(unsigned int index);
-    const CullBox& getBoundingBox() const;
-    void setBoundingBox(const CullBox& box);
+    const CullBoxBase& getBoundingBox() const;
+    void setBoundingBox(const CullBoxBase& box);
     void render(int& rendered_tri, int& rendered_vert);
     
 private:
@@ -60,7 +60,7 @@ private:
     RenderAPI::PrimitiveType _primitiveType;
     unsigned int _partCount;
     CMeshPartMetal** _parts;
-    CullBox _boundingBox;
+    CullBoxBase _boundingBox;
     RenderAPI::VertecDeclElement _vertexLayout;
     
     MetalDataOffset dataoffset;
