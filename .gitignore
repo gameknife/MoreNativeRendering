@@ -31,3 +31,6 @@ sysinfo.txt
 UnityProject/Library/
 PluginSource/build/
 UnityProject/Temp
+iOSBuild
+PluginSource
+.DS_Store
